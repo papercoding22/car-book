@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-accent: #0891b2;
+
+  --color-bg: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f8fafc;
+  --color-border: #e2e8f0;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-muted: #94a3b8;
+
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+}
+
+[data-theme='dark'] {
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-accent: #06b6d4;
+
+  --color-bg: #0f172a;
+  --color-surface: #111827;
+  --color-surface-alt: #0b1220;
+  --color-border: #334155;
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-muted: #94a3b8;
+
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, var(--color-surface-alt) 0%, var(--color-bg) 55%, var(--color-bg) 100%);
+  color: var(--color-text-primary);
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  padding: 0.6rem 0.75rem;
+}
+
+.input::placeholder {
+  color: var(--color-muted);
+}
+
+.input:focus {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+  outline-offset: 1px;
+}
+
+[data-theme='light'] .bg-slate-950,
+[data-theme='light'] .bg-slate-950\/90,
+[data-theme='dark'] .bg-slate-950,
+[data-theme='dark'] .bg-slate-950\/90 {
+  background-color: var(--color-bg) !important;
+}
+
+[data-theme='light'] .bg-slate-900,
+[data-theme='light'] .bg-slate-900\/70,
+[data-theme='light'] .bg-slate-950\/60,
+[data-theme='light'] .bg-slate-900\/30,
+[data-theme='dark'] .bg-slate-900,
+[data-theme='dark'] .bg-slate-900\/70,
+[data-theme='dark'] .bg-slate-950\/60,
+[data-theme='dark'] .bg-slate-900\/30 {
+  background-color: color-mix(in srgb, var(--color-surface) 94%, transparent) !important;
+}
+
+[data-theme='light'] .border-slate-900,
+[data-theme='light'] .border-slate-800,
+[data-theme='light'] .border-slate-800\/80,
+[data-theme='light'] .border-slate-700,
+[data-theme='dark'] .border-slate-900,
+[data-theme='dark'] .border-slate-800,
+[data-theme='dark'] .border-slate-800\/80,
+[data-theme='dark'] .border-slate-700 {
+  border-color: color-mix(in srgb, var(--color-border) 92%, transparent) !important;
+}
+
+[data-theme='light'] .text-slate-100,
+[data-theme='light'] .text-slate-200,
+[data-theme='dark'] .text-white,
+[data-theme='dark'] .text-slate-100,
+[data-theme='dark'] .text-slate-200 {
+  color: var(--color-text-primary) !important;
+}
+
+[data-theme='light'] .bg-blue-600.text-white {
+  color: #f8fafc !important;
+}
+
+[data-theme='light'] .bg-blue-600.text-slate-900,
+[data-theme='light'] .bg-blue-600 .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+[data-theme='light'] .text-slate-300,
+[data-theme='dark'] .text-slate-300 {
+  color: var(--color-text-secondary) !important;
+}
+
+[data-theme='light'] .text-slate-400,
+[data-theme='dark'] .text-slate-400 {
+  color: var(--color-muted) !important;
+}
+
+[data-theme='light'] .hover\:bg-slate-800:hover,
+[data-theme='light'] .hover\:bg-slate-900\/30:hover,
+[data-theme='dark'] .hover\:bg-slate-800:hover,
+[data-theme='dark'] .hover\:bg-slate-900\/30:hover {
+  background-color: color-mix(in srgb, var(--color-border) 45%, transparent) !important;
+}
+
+.bg-blue-600 {
+  background-color: var(--color-primary) !important;
+}
+
+.hover\:bg-blue-700:hover {
+  background-color: var(--color-primary-hover) !important;
+}
+
+.text-cyan-400 {
+  color: var(--color-accent) !important;
+}
+
+.text-blue-200 {
+  color: color-mix(in srgb, var(--color-primary) 65%, var(--color-text-primary)) !important;
+}
+
+.border-blue-600 {
+  border-color: var(--color-primary) !important;
+}
+
+.bg-blue-600\/20 {
+  background-color: color-mix(in srgb, var(--color-primary) 20%, transparent) !important;
+}
+
+.border-red-500\/70 {
+  border-color: color-mix(in srgb, var(--color-danger) 72%, transparent) !important;
+}
+
+.text-red-400 {
+  color: var(--color-danger) !important;
+}
+
+.hover\:bg-red-500\/15:hover {
+  background-color: color-mix(in srgb, var(--color-danger) 16%, transparent) !important;
+}
+
+.react-datepicker {
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0.9rem !important;
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--color-bg) 30%, #000 30%);
+}
+
+.react-datepicker__header {
+  border-bottom: 1px solid var(--color-border) !important;
+  background: var(--color-surface) !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header,
+.react-datepicker__day-name {
+  color: var(--color-text-primary) !important;
+}
+
+.react-datepicker__day {
+  color: var(--color-text-primary) !important;
+  border-radius: 0.5rem !important;
+}
+
+.react-datepicker__day:hover {
+  background: color-mix(in srgb, var(--color-border) 45%, transparent) !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: var(--color-primary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.react-datepicker__day--outside-month {
+  color: var(--color-muted) !important;
+}
