@@ -340,7 +340,7 @@ function ExpenseFormSection({ carId, editingItem, onSaved }: ExpenseFormSectionP
       />
       <button
         type="submit"
-        className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 md:col-span-3"
+        className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 hover:bg-blue-700 md:col-span-3"
       >
         {editingItem ? 'Cập nhật chi phí' : 'Thêm chi phí'}
       </button>

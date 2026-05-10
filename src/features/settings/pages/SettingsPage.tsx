@@ -44,7 +44,7 @@ export function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
-      <h2 className="text-2xl font-semibold text-white">Cài đặt ứng dụng</h2>
+      <h2 className="text-2xl font-semibold text-slate-200">Cài đặt ứng dụng</h2>
 
       <section className="space-y-4 rounded-2xl border border-slate-800 bg-slate-900 p-5">
         <div>
@@ -82,7 +82,7 @@ export function SettingsPage() {
           <button
             type="button"
             onClick={onExport}
-            className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
+            className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 hover:bg-blue-700"
           >
             Xuất dữ liệu JSON
           </button>

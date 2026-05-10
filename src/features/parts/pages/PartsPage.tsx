@@ -93,7 +93,7 @@ export function PartsPage() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-white">
+        <h2 className="text-2xl font-semibold text-slate-200">
           Phụ tùng đang lắp - {car.brand} {car.model}
         </h2>
         <Link
@@ -159,7 +159,7 @@ export function PartsPage() {
           />
           <button
             type="submit"
-            className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 md:col-span-3"
+            className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 hover:bg-blue-700 md:col-span-3"
           >
             {editingItem ? 'Cập nhật phụ tùng' : 'Thêm phụ tùng'}
           </button>

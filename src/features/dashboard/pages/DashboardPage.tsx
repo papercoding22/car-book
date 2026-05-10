@@ -53,7 +53,7 @@ export function DashboardPage() {
       <section className="flex flex-wrap gap-3">
         <Link
           to={routes.newCar}
-          className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700"
+          className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 transition hover:bg-blue-700"
         >
           Thêm xe
         </Link>
@@ -76,7 +76,7 @@ export function DashboardPage() {
             action={
               <Link
                 to={routes.newCar}
-                className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700"
+                className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 transition hover:bg-blue-700"
               >
                 Thêm xe ngay
               </Link>
@@ -101,7 +101,7 @@ export function DashboardPage() {
                     className="mb-3 h-36 w-full rounded-xl object-cover"
                   />
                   <p className="text-sm text-slate-400">{car.licensePlate}</p>
-                  <h3 className="mt-1 text-lg font-semibold text-white">
+                  <h3 className="mt-1 text-lg font-semibold text-slate-200">
                     {car.brand} {car.model}
                   </h3>
                   <p className="mt-3 text-sm text-slate-300">

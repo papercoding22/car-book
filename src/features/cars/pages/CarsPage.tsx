@@ -28,7 +28,7 @@ export function CarsPage() {
         action={
           <Link
             to={routes.newCar}
-            className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700"
+            className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 transition hover:bg-blue-700"
           >
             Thêm xe
           </Link>
@@ -40,10 +40,10 @@ export function CarsPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-white">Danh sách xe</h2>
-        <Link
+        <h2 className="text-2xl font-semibold text-slate-200">Danh sách xe</h2>
+          <Link
           to={routes.newCar}
-          className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700"
+          className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 transition hover:bg-blue-700"
         >
           Thêm xe mới
         </Link>
@@ -63,7 +63,7 @@ export function CarsPage() {
                 className="mb-3 h-40 w-full rounded-xl object-cover"
               />
               <p className="text-sm text-slate-300">{car.manufactureYear}</p>
-              <h3 className="mt-1 text-lg font-semibold text-white">
+              <h3 className="mt-1 text-lg font-semibold text-slate-200">
                 {car.brand} {car.model}
               </h3>
               <p className="mt-3 text-sm text-slate-300">Biển số: {car.licensePlate}</p>

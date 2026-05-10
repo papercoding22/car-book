@@ -28,7 +28,7 @@ export function AppLayout() {
                   className={({ isActive }) =>
                     [
                       'flex items-center gap-2 rounded-full px-3 py-2 text-sm transition',
-                      isActive ? 'bg-blue-600 text-white' : 'text-slate-200 hover:bg-slate-800',
+                      isActive ? 'bg-blue-600 text-slate-200' : 'text-slate-200 hover:bg-slate-800',
                     ].join(' ')
                   }
                 >

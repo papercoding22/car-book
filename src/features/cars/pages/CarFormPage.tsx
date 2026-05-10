@@ -116,7 +116,7 @@ export function CarFormPage({ mode }: CarFormPageProps) {
 
   return (
     <div className="mx-auto max-w-3xl rounded-2xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-2xl font-semibold text-white">
+      <h2 className="text-2xl font-semibold text-slate-200">
         {mode === 'create' ? 'Thêm xe mới' : 'Chỉnh sửa thông tin xe'}
       </h2>
       <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -180,7 +180,7 @@ export function CarFormPage({ mode }: CarFormPageProps) {
           <textarea name="note" defaultValue={current?.note} rows={4} className="input" />
         </label>
         <div className="flex gap-3 sm:col-span-2">
-          <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700">
+          <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 hover:bg-blue-700">
             {mode === 'create' ? 'Lưu xe' : 'Cập nhật'}
           </button>
           <Link to={routes.cars} className="rounded-xl border border-slate-700 px-4 py-2 text-slate-100">
