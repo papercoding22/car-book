@@ -134,6 +134,10 @@ body {
   background-color: var(--color-primary) !important;
 }
 
+.text-blue-600 {
+  color: var(--color-primary) !important;
+}
+
 .hover\:bg-blue-700:hover {
   background-color: var(--color-primary-hover) !important;
 }

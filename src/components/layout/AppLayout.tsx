@@ -1,5 +1,5 @@
 import { Car, GaugeCircle, Settings } from 'lucide-react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 
 const navItems = [
   { to: '/', label: 'Tổng quan', icon: GaugeCircle, end: true },
@@ -12,10 +12,10 @@ export function AppLayout() {
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <header className="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-cyan-400">Garage Log</p>
-            <h1 className="text-2xl font-semibold text-white">Quản lý xe cá nhân</h1>
-          </div>
+          <Link to="/" className="block">
+            <p className="text-xs uppercase tracking-[0.2em] text-blue-600">Garage Log</p>
+            <h1 className="text-2xl font-semibold text-slate-200">Quản lý xe cá nhân</h1>
+          </Link>
           <nav className="flex gap-2 rounded-full border border-slate-700 bg-slate-900 p-1">
             {navItems.map((item) => {
               const Icon = item.icon
