@@ -153,6 +153,133 @@ export function exportData(): string {
   return JSON.stringify(getAppData(), null, 2)
 }
 
+function escapeCsvValue(value: unknown): string {
+  if (value === undefined || value === null) {
+    return ''
+  }
+
+  const text = String(value)
+  if (text.includes(',') || text.includes('"') || text.includes('\n')) {
+    return `"${text.replace(/"/g, '""')}"`
+  }
+
+  return text
+}
+
+function toCsv(headers: string[], rows: Array<Array<unknown>>): string {
+  const headerLine = headers.map(escapeCsvValue).join(',')
+  const lines = rows.map((row) => row.map(escapeCsvValue).join(','))
+  return [headerLine, ...lines].join('\n')
+}
+
+export type CsvExportFile = {
+  filename: string
+  content: string
+}
+
+export function exportCsvData(): CsvExportFile[] {
+  const data = getAppData()
+
+  const carsCsv = toCsv(
+    [
+      'id',
+      'brand',
+      'model',
+      'manufactureYear',
+      'licensePlate',
+      'currentOdo',
+      'image',
+      'horsepower',
+      'note',
+      'createdAt',
+      'updatedAt',
+    ],
+    data.cars.map((car) => [
+      car.id,
+      car.brand,
+      car.model,
+      car.manufactureYear,
+      car.licensePlate,
+      car.currentOdo,
+      car.image,
+      car.horsepower,
+      car.note,
+      car.createdAt,
+      car.updatedAt,
+    ]),
+  )
+
+  const expensesCsv = toCsv(
+    [
+      'id',
+      'carId',
+      'date',
+      'categoryGroup',
+      'category',
+      'cost',
+      'odoAtExpense',
+      'note',
+      'createdAt',
+      'updatedAt',
+    ],
+    data.expenses.map((expense) => [
+      expense.id,
+      expense.carId,
+      expense.date,
+      expense.categoryGroup,
+      expense.category,
+      expense.cost,
+      expense.odoAtExpense,
+      expense.note,
+      expense.createdAt,
+      expense.updatedAt,
+    ]),
+  )
+
+  const partsCsv = toCsv(
+    [
+      'id',
+      'carId',
+      'partName',
+      'brand',
+      'installedAtOdo',
+      'currentOdoSnapshot',
+      'installedDate',
+      'status',
+      'note',
+      'createdAt',
+      'updatedAt',
+    ],
+    data.installedParts.map((part) => [
+      part.id,
+      part.carId,
+      part.partName,
+      part.brand,
+      part.installedAtOdo,
+      part.currentOdoSnapshot,
+      part.installedDate,
+      part.status,
+      part.note,
+      part.createdAt,
+      part.updatedAt,
+    ]),
+  )
+
+  const customCategoriesCsv = toCsv(
+    ['categoryGroup', 'category'],
+    Object.entries(data.customExpenseCategories).flatMap(([group, categories]) =>
+      (categories ?? []).map((category) => [group, category]),
+    ),
+  )
+
+  return [
+    { filename: 'cars.csv', content: carsCsv },
+    { filename: 'expenses.csv', content: expensesCsv },
+    { filename: 'installed-parts.csv', content: partsCsv },
+    { filename: 'custom-expense-categories.csv', content: customCategoriesCsv },
+  ]
+}
+
 export function importData(rawText: string): void {
   const parsed = JSON.parse(rawText) as AppData
   const migrated = migrateDataIfNeeded(parsed)

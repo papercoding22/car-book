@@ -142,28 +142,28 @@ export function ExpenseTimelinePage() {
         <p className="mb-2 text-sm text-slate-300">
           Tổng chi phí theo bộ lọc: {formatCurrency(total)}
         </p>
-        <div className="overflow-auto">
-          <table className="min-w-full text-left text-sm">
+        <div className="overflow-x-auto">
+          <table className="min-w-[760px] text-left text-sm">
             <thead>
               <tr className="border-b border-slate-800 text-slate-400">
-                <th className="py-2">Date</th>
-                <th className="py-2">Category</th>
-                <th className="py-2">Cost</th>
-                <th className="py-2">ODO</th>
-                <th className="py-2">Note</th>
-                <th className="py-2">Action</th>
+                <th className="min-w-[110px] py-2 pr-4">Ngày</th>
+                <th className="min-w-[170px] py-2 pr-4">Hạng mục</th>
+                <th className="min-w-[140px] py-2 pr-4">Chi phí</th>
+                <th className="min-w-[130px] py-2 pr-4">ODO</th>
+                <th className="min-w-[180px] py-2 pr-4">Ghi chú</th>
+                <th className="min-w-[120px] py-2">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               {items.map((expense) => (
                 <tr key={expense.id} className="border-b border-slate-900">
-                  <td className="py-2 text-slate-200">{formatDate(expense.date)}</td>
-                  <td className="py-2 text-slate-200">{expense.category}</td>
-                  <td className="py-2 text-slate-200">{formatCurrency(expense.cost)}</td>
-                  <td className="py-2 text-slate-200">
+                  <td className="py-2 pr-4 text-slate-200 whitespace-nowrap">{formatDate(expense.date)}</td>
+                  <td className="py-2 pr-4 text-slate-200">{expense.category}</td>
+                  <td className="py-2 pr-4 text-slate-200 whitespace-nowrap">{formatCurrency(expense.cost)}</td>
+                  <td className="py-2 pr-4 text-slate-200 whitespace-nowrap">
                     {expense.odoAtExpense ? formatOdo(expense.odoAtExpense) : '-'}
                   </td>
-                  <td className="py-2 text-slate-200">{expense.note || '-'}</td>
+                  <td className="py-2 pr-4 text-slate-200">{expense.note || '-'}</td>
                   <td className="py-2">
                     <div className="flex gap-2">
                       <button

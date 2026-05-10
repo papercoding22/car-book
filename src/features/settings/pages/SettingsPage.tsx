@@ -1,4 +1,4 @@
-import { exportData, importData, resetAppData } from '../../../services/storage/appData'
+import { exportCsvData, exportData, importData, resetAppData } from '../../../services/storage/appData'
 import type { ChangeEventHandler } from 'react'
 import { useTheme } from '../../../app/theme'
 
@@ -16,6 +16,21 @@ export function SettingsPage() {
     link.download = `garage-log-${new Date().toISOString().slice(0, 10)}.json`
     link.click()
     URL.revokeObjectURL(href)
+  }
+
+  const onExportCsv = () => {
+    const dateSuffix = new Date().toISOString().slice(0, 10)
+    const files = exportCsvData()
+
+    files.forEach((file) => {
+      const blob = new Blob([file.content], { type: 'text/csv;charset=utf-8;' })
+      const href = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = href
+      link.download = `garage-log-${dateSuffix}-${file.filename}`
+      link.click()
+      URL.revokeObjectURL(href)
+    })
   }
 
   const onImport: ChangeEventHandler<HTMLInputElement> = async (event) => {
@@ -85,6 +100,13 @@ export function SettingsPage() {
             className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 hover:bg-blue-700"
           >
             Xuất dữ liệu JSON
+          </button>
+          <button
+            type="button"
+            onClick={onExportCsv}
+            className="rounded-xl border border-blue-600 px-4 py-2 font-medium text-blue-200 hover:bg-blue-600/20"
+          >
+            Xuất dữ liệu CSV
           </button>
           <label className="cursor-pointer rounded-xl border border-slate-700 px-4 py-2 text-slate-100 hover:bg-slate-800">
             Nhập dữ liệu JSON
