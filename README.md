@@ -50,6 +50,36 @@ Sau khi deploy, app thường có URL dạng:
 
 `https://papercoding22.github.io/car-book/`
 
+## Firebase config
+
+Project đã hỗ trợ đọc Firebase config từ biến môi trường.
+
+1. Copy `.env.example` thành `.env`.
+2. Điền các giá trị `VITE_FIREBASE_*` trong `.env`.
+
+```bash
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
+VITE_FIREBASE_APP_ID=...
+VITE_FIREBASE_MEASUREMENT_ID=...
+```
+
+Nếu deploy bằng GitHub Actions, thêm các secret cùng tên trong
+`Settings -> Secrets and variables -> Actions`.
+
+Workflow `deploy-pages.yml` đã map sẵn các secret này vào env khi build.
+
+## Analytics (GA4)
+
+Nếu dùng GA4, thêm:
+
+```bash
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
 ## Cấu trúc chính
 
 ```text
