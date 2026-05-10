@@ -68,7 +68,7 @@ export function DashboardPage() {
       </section>
 
       <section>
-        <h2 className="mb-3 text-xl font-semibold text-white">Garage của bạn</h2>
+        <h2 className="mb-3 text-xl font-semibold text-slate-200">Garage của bạn</h2>
         {data.cars.length === 0 ? (
           <EmptyState
             title="Chưa có xe nào trong garage"

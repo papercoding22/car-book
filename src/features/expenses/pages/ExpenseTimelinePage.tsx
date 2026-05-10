@@ -68,16 +68,23 @@ export function ExpenseTimelinePage() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-white">
+        <h2 className="text-2xl font-semibold text-slate-200">
           Timeline chi phí - {car.brand} {car.model}
         </h2>
-        <Link to={routes.carDetail(carId)} className="rounded-lg border border-slate-700 px-3 py-1.5 text-sm">
+        <Link
+          to={routes.carDetail(carId)}
+          className="rounded-lg border border-slate-700 px-3 py-1.5 text-sm"
+        >
           Về chi tiết xe
         </Link>
       </div>
 
       <section className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
-        <ExpenseFormSection carId={carId} editingItem={editingItem} onSaved={() => navigate(routes.expenses(carId), { replace: true })} />
+        <ExpenseFormSection
+          carId={carId}
+          editingItem={editingItem}
+          onSaved={() => navigate(routes.expenses(carId), { replace: true })}
+        />
       </section>
 
       <section className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
@@ -132,7 +139,9 @@ export function ExpenseTimelinePage() {
           />
         </div>
 
-        <p className="mb-2 text-sm text-slate-300">Tổng chi phí theo bộ lọc: {formatCurrency(total)}</p>
+        <p className="mb-2 text-sm text-slate-300">
+          Tổng chi phí theo bộ lọc: {formatCurrency(total)}
+        </p>
         <div className="overflow-auto">
           <table className="min-w-full text-left text-sm">
             <thead>
@@ -151,7 +160,9 @@ export function ExpenseTimelinePage() {
                   <td className="py-2 text-slate-200">{formatDate(expense.date)}</td>
                   <td className="py-2 text-slate-200">{expense.category}</td>
                   <td className="py-2 text-slate-200">{formatCurrency(expense.cost)}</td>
-                  <td className="py-2 text-slate-200">{expense.odoAtExpense ? formatOdo(expense.odoAtExpense) : '-'}</td>
+                  <td className="py-2 text-slate-200">
+                    {expense.odoAtExpense ? formatOdo(expense.odoAtExpense) : '-'}
+                  </td>
                   <td className="py-2 text-slate-200">{expense.note || '-'}</td>
                   <td className="py-2">
                     <div className="flex gap-2">
@@ -192,7 +203,9 @@ type ExpenseFormSectionProps = {
 }
 
 function ExpenseFormSection({ carId, editingItem, onSaved }: ExpenseFormSectionProps) {
-  const [formGroup, setFormGroup] = useState<ExpenseCategoryGroup>(editingItem?.categoryGroup ?? 'maintenance')
+  const [formGroup, setFormGroup] = useState<ExpenseCategoryGroup>(
+    editingItem?.categoryGroup ?? 'maintenance',
+  )
   const [newCategoryName, setNewCategoryName] = useState('')
   const [categoryVersion, setCategoryVersion] = useState(0)
   const [preferredCategory, setPreferredCategory] = useState(editingItem?.category ?? '')
