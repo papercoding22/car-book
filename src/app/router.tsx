@@ -5,6 +5,7 @@ import { CarDetailPage } from '../features/cars/pages/CarDetailPage'
 import { CarFormPage } from '../features/cars/pages/CarFormPage'
 import { CarsPage } from '../features/cars/pages/CarsPage'
 import { ExpenseTimelinePage } from '../features/expenses/pages/ExpenseTimelinePage'
+import { ExpenseListPage } from '../features/expenses/pages/ExpenseListPage'
 import { PartsPage } from '../features/parts/pages/PartsPage'
 import { SettingsPage } from '../features/settings/pages/SettingsPage'
 
@@ -19,6 +20,7 @@ export function AppRouter() {
           <Route path="/cars/:carId" element={<CarDetailPage />} />
           <Route path="/cars/:carId/edit" element={<CarFormPage mode="edit" />} />
           <Route path="/cars/:carId/expenses" element={<ExpenseTimelinePage />} />
+          <Route path="/cars/:carId/expenses/all" element={<ExpenseListPage />} />
           <Route path="/cars/:carId/parts" element={<PartsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>

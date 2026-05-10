@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import type { FormEventHandler } from 'react'
+import Select from 'react-select'
 import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { routes } from '../../../app/routes'
 import { carRepository } from '../../cars/car.repository'
@@ -36,6 +37,11 @@ const statusBadgeClass: Record<PartStatus, string> = {
   removed: 'border-slate-500/50 bg-slate-500/15 text-slate-200',
   needs_check: 'border-[#F59E0B]/40 bg-[#F59E0B]/15 text-[#F59E0B]',
 }
+
+const statusOptions = (Object.keys(statusLabel) as PartStatus[]).map((status) => ({
+  value: status,
+  label: statusLabel[status],
+}))
 
 export function PartsPage() {
   const { carId } = useParams()
@@ -143,13 +149,15 @@ export function PartsPage() {
             defaultValue={editingItem?.installedDate}
             placeholder="Ngày lắp"
           />
-          <select name="status" className="input" defaultValue={editingItem?.status ?? 'active'}>
-            {(Object.keys(statusLabel) as PartStatus[]).map((status) => (
-              <option key={status} value={status}>
-                {statusLabel[status]}
-              </option>
-            ))}
-          </select>
+          <Select
+            key={`status-${editingItem?.id ?? 'new'}`}
+            name="status"
+            classNamePrefix="brand-select"
+            options={statusOptions}
+            defaultValue={statusOptions.find((option) => option.value === (editingItem?.status ?? 'active'))}
+            isSearchable={false}
+            placeholder="Chọn trạng thái"
+          />
           <textarea
             name="note"
             className="input md:col-span-3"
@@ -168,26 +176,28 @@ export function PartsPage() {
 
       <section className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
         <div className="mb-3 flex flex-wrap items-center gap-3">
-          <select
-            className="input max-w-xs"
-            value={statusFilter}
-            onChange={(event) => {
-              const next = new URLSearchParams(searchParams)
-              if (event.target.value) {
-                next.set('status', event.target.value)
-              } else {
-                next.delete('status')
+          <div className="w-full max-w-xs">
+            <Select
+              classNamePrefix="brand-select"
+              options={[{ value: '', label: 'Tất cả trạng thái' }, ...statusOptions]}
+              value={
+                [{ value: '', label: 'Tất cả trạng thái' }, ...statusOptions].find(
+                  (option) => option.value === statusFilter,
+                ) ?? null
               }
-              setSearchParams(next)
-            }}
-          >
-            <option value="">Tất cả status</option>
-            {(Object.keys(statusLabel) as PartStatus[]).map((status) => (
-              <option key={status} value={status}>
-                {statusLabel[status]}
-              </option>
-            ))}
-          </select>
+              onChange={(option) => {
+                const next = new URLSearchParams(searchParams)
+                if (option?.value) {
+                  next.set('status', option.value)
+                } else {
+                  next.delete('status')
+                }
+                setSearchParams(next)
+              }}
+              isSearchable={false}
+              placeholder="Lọc trạng thái"
+            />
+          </div>
         </div>
 
         <div className="overflow-auto">

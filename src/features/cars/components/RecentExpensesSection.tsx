@@ -1,13 +1,16 @@
 import { CalendarDays, ReceiptText } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { routes } from '../../../app/routes'
 import { formatCurrency } from '../../../utils/formatCurrency'
 import { formatDate } from '../../../utils/formatDate'
 import type { Expense } from '../../expenses/expense.types'
 
 type RecentExpensesSectionProps = {
+  carId: string
   expenses: Expense[]
 }
 
-export function RecentExpensesSection({ expenses }: RecentExpensesSectionProps) {
+export function RecentExpensesSection({ carId, expenses }: RecentExpensesSectionProps) {
   const topFive = expenses.slice(0, 5)
 
   return (
@@ -17,9 +20,17 @@ export function RecentExpensesSection({ expenses }: RecentExpensesSectionProps) 
           <ReceiptText size={18} className="text-blue-600" />
           Chi phí gần đây
         </h3>
-        <span className="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-300">
-          {topFive.length} mục
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-300">
+            {topFive.length} mục
+          </span>
+          <Link
+            to={routes.expenseList(carId)}
+            className="rounded-lg border border-slate-700 px-2.5 py-1 text-xs text-slate-200 hover:bg-slate-800"
+          >
+            Xem tất cả
+          </Link>
+        </div>
       </div>
 
       <div className="space-y-3">

@@ -170,17 +170,47 @@ body {
   background-color: color-mix(in srgb, var(--color-danger) 16%, transparent) !important;
 }
 
+.app-datepicker-field {
+  position: relative;
+}
+
+.app-datepicker-wrapper {
+  width: 100%;
+}
+
+.app-date-input {
+  padding-left: 2rem;
+}
+
+.app-datepicker-icon {
+  position: absolute;
+  left: 0.7rem;
+  top: 50%;
+  z-index: 2;
+  transform: translateY(-50%);
+  color: var(--color-muted);
+  pointer-events: none;
+}
+
+.app-datepicker-popper {
+  z-index: 60 !important;
+}
+
 .react-datepicker {
   border: 1px solid var(--color-border) !important;
-  border-radius: 0.9rem !important;
+  border-radius: 1rem !important;
   background: var(--color-surface) !important;
   color: var(--color-text-primary) !important;
-  box-shadow: 0 16px 40px color-mix(in srgb, var(--color-bg) 30%, #000 30%);
+  box-shadow: 0 20px 48px color-mix(in srgb, var(--color-bg) 25%, #000 30%);
+  padding: 0.35rem;
 }
 
 .react-datepicker__header {
   border-bottom: 1px solid var(--color-border) !important;
   background: var(--color-surface) !important;
+  border-top-left-radius: 0.8rem !important;
+  border-top-right-radius: 0.8rem !important;
+  padding-top: 0.5rem;
 }
 
 .react-datepicker__current-month,
@@ -190,19 +220,46 @@ body {
   color: var(--color-text-primary) !important;
 }
 
+.react-datepicker__current-month {
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+}
+
+.react-datepicker__month-dropdown,
+.react-datepicker__year-dropdown,
+.react-datepicker__month-select,
+.react-datepicker__year-select {
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0.55rem !important;
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.react-datepicker__navigation {
+  top: 0.65rem !important;
+}
+
 .react-datepicker__day {
   color: var(--color-text-primary) !important;
   border-radius: 0.5rem !important;
+  width: 2rem !important;
+  line-height: 2rem !important;
+  margin: 0.12rem !important;
 }
 
 .react-datepicker__day:hover {
   background: color-mix(in srgb, var(--color-border) 45%, transparent) !important;
 }
 
+.react-datepicker__day--today {
+  outline: 1px dashed color-mix(in srgb, var(--color-accent) 80%, transparent);
+  outline-offset: -2px;
+}
+
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
   background: var(--color-primary) !important;
-  color: var(--color-text-primary) !important;
+  color: #f8fafc !important;
 }
 
 .react-datepicker__day--outside-month {

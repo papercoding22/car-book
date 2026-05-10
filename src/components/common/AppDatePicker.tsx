@@ -2,6 +2,7 @@ import DatePicker from 'react-datepicker'
 import { format, parseISO } from 'date-fns'
 import { vi } from 'date-fns/locale'
 import { useState } from 'react'
+import { CalendarDays } from 'lucide-react'
 import 'react-datepicker/dist/react-datepicker.css'
 
 type AppDatePickerProps = {
@@ -29,18 +30,26 @@ export function AppDatePicker({ name, defaultValue, className, placeholder, requ
   const [selectedDate, setSelectedDate] = useState<Date | null>(() => parseDefaultDate(defaultValue))
 
   return (
-    <>
+    <div className="app-datepicker-field">
+      <CalendarDays size={16} className="app-datepicker-icon" />
       <DatePicker
         selected={selectedDate}
         onChange={(date: Date | null) => setSelectedDate(date)}
         dateFormat="dd/MM/yyyy"
-        className={className}
+        className={['app-date-input', className].filter(Boolean).join(' ')}
+        calendarClassName="app-datepicker-calendar"
+        popperClassName="app-datepicker-popper"
+        wrapperClassName="app-datepicker-wrapper"
         placeholderText={placeholder}
         locale={vi}
         isClearable={!required}
         showPopperArrow={false}
+        showMonthDropdown
+        showYearDropdown
+        dropdownMode="select"
+        yearDropdownItemNumber={12}
       />
       <input type="hidden" name={name} value={selectedDate ? format(selectedDate, 'yyyy-MM-dd') : ''} />
-    </>
+    </div>
   )
 }

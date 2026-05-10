@@ -1,7 +1,9 @@
 import { z } from 'zod'
 import { useState } from 'react'
 import type { FormEventHandler } from 'react'
-import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import Select from 'react-select'
+import { createPortal } from 'react-dom'
+import { Link, Navigate, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { routes } from '../../../app/routes'
 import { carRepository } from '../../cars/car.repository'
 import { expenseCategories } from '../expenseCategories'
@@ -26,10 +28,19 @@ const schema = z.object({
   note: z.string().optional(),
 })
 
+const expenseGroupOptions = Object.entries(expenseCategories).map(([key, category]) => ({
+  value: key as ExpenseCategoryGroup,
+  label: category.label,
+}))
+
 export function ExpenseTimelinePage() {
   const { carId } = useParams()
+  const location = useLocation()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
+  const initialEditExpenseId =
+    ((location.state as { editExpenseId?: string } | null)?.editExpenseId as string | undefined) ?? null
+  const [editingExpenseId, setEditingExpenseId] = useState<string | null>(initialEditExpenseId)
 
   if (!carId) {
     return <Navigate to={routes.cars} replace />
@@ -44,16 +55,18 @@ export function ExpenseTimelinePage() {
   const monthFilter = searchParams.get('month') ?? ''
   const query = (searchParams.get('q') ?? '').toLowerCase()
 
-  const items = expenseRepository
-    .listByCar(carId)
+  const allExpenses = expenseRepository.listByCar(carId)
+
+  const items = allExpenses
     .filter((expense) => (currentFilter ? expense.categoryGroup === currentFilter : true))
     .filter((expense) => (monthFilter ? expense.date.startsWith(monthFilter) : true))
     .filter((expense) =>
       query ? `${expense.category} ${expense.note ?? ''}`.toLowerCase().includes(query) : true,
     )
 
-  const editingId = searchParams.get('edit')
-  const editingItem = items.find((item) => item.id === editingId)
+  const editingItem = editingExpenseId
+    ? allExpenses.find((expense) => expense.id === editingExpenseId)
+    : undefined
 
   const onDelete = (expenseId: string) => {
     if (!window.confirm('Bạn chắc chắn muốn xóa chi phí này?')) {
@@ -82,33 +95,32 @@ export function ExpenseTimelinePage() {
       <section className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
         <ExpenseFormSection
           carId={carId}
-          editingItem={editingItem}
           onSaved={() => navigate(routes.expenses(carId), { replace: true })}
         />
       </section>
 
       <section className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
         <div className="mb-3 grid gap-3 md:grid-cols-4">
-          <select
-            className="input"
-            value={currentFilter}
-            onChange={(event) => {
+          <Select
+            classNamePrefix="brand-select"
+            options={[{ value: '', label: 'Tất cả nhóm' }, ...expenseGroupOptions]}
+            value={
+              [{ value: '', label: 'Tất cả nhóm' }, ...expenseGroupOptions].find(
+                (option) => option.value === currentFilter,
+              ) ?? null
+            }
+            onChange={(option) => {
               const next = new URLSearchParams(searchParams)
-              if (event.target.value) {
-                next.set('group', event.target.value)
+              if (option?.value) {
+                next.set('group', option.value)
               } else {
                 next.delete('group')
               }
               setSearchParams(next)
             }}
-          >
-            <option value="">Tất cả nhóm</option>
-            {Object.entries(expenseCategories).map(([key, item]) => (
-              <option key={key} value={key}>
-                {item.label}
-              </option>
-            ))}
-          </select>
+            isSearchable={false}
+            placeholder="Lọc nhóm"
+          />
           <input
             type="month"
             className="input"
@@ -157,9 +169,13 @@ export function ExpenseTimelinePage() {
             <tbody>
               {items.map((expense) => (
                 <tr key={expense.id} className="border-b border-slate-900">
-                  <td className="py-2 pr-4 text-slate-200 whitespace-nowrap">{formatDate(expense.date)}</td>
+                  <td className="py-2 pr-4 text-slate-200 whitespace-nowrap">
+                    {formatDate(expense.date)}
+                  </td>
                   <td className="py-2 pr-4 text-slate-200">{expense.category}</td>
-                  <td className="py-2 pr-4 text-slate-200 whitespace-nowrap">{formatCurrency(expense.cost)}</td>
+                  <td className="py-2 pr-4 text-slate-200 whitespace-nowrap">
+                    {formatCurrency(expense.cost)}
+                  </td>
                   <td className="py-2 pr-4 text-slate-200 whitespace-nowrap">
                     {expense.odoAtExpense ? formatOdo(expense.odoAtExpense) : '-'}
                   </td>
@@ -169,11 +185,7 @@ export function ExpenseTimelinePage() {
                       <button
                         type="button"
                         className="rounded border border-slate-700 px-2 py-1 text-xs"
-                        onClick={() => {
-                          const next = new URLSearchParams(searchParams)
-                          next.set('edit', expense.id)
-                          setSearchParams(next)
-                        }}
+                        onClick={() => setEditingExpenseId(expense.id)}
                       >
                         Sửa
                       </button>
@@ -192,6 +204,41 @@ export function ExpenseTimelinePage() {
           </table>
         </div>
       </section>
+
+      {editingItem
+        ? createPortal(
+            <div className="fixed inset-0 z-[100] p-4">
+              <div
+                className="absolute inset-0 bg-slate-950/70"
+                onClick={() => setEditingExpenseId(null)}
+                aria-hidden="true"
+              />
+
+              <div className="relative flex h-full items-center justify-center">
+                <div className="w-full max-w-3xl rounded-2xl border border-slate-800 bg-slate-900 p-4 shadow-2xl">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-slate-200">Chỉnh sửa chi phí</h3>
+                    <button
+                      type="button"
+                      onClick={() => setEditingExpenseId(null)}
+                      className="rounded-lg border border-slate-700 px-3 py-1.5 text-sm text-slate-200 hover:bg-slate-800"
+                    >
+                      Đóng
+                    </button>
+                  </div>
+
+                  <ExpenseFormSection
+                    key={`edit-expense-${editingItem.id}`}
+                    carId={carId}
+                    editingItem={editingItem}
+                    onSaved={() => setEditingExpenseId(null)}
+                  />
+                </div>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   )
 }
@@ -211,6 +258,7 @@ function ExpenseFormSection({ carId, editingItem, onSaved }: ExpenseFormSectionP
   const [preferredCategory, setPreferredCategory] = useState(editingItem?.category ?? '')
 
   const categoryItems = expenseCategoryRepository.listByGroup(formGroup)
+  const categoryOptions = categoryItems.map((item) => ({ value: item, label: item }))
   const selectedCategory = categoryItems.includes(preferredCategory)
     ? preferredCategory
     : (categoryItems[0] ?? '')
@@ -261,83 +309,100 @@ function ExpenseFormSection({ carId, editingItem, onSaved }: ExpenseFormSectionP
 
   return (
     <form onSubmit={onSubmit} className="grid gap-3 md:grid-cols-3">
-      <AppDatePicker
-        key={`date-${editingItem?.id ?? 'new'}`}
-        name="date"
-        defaultValue={editingItem?.date}
-        className="input"
-        required
-        placeholder="Chọn ngày"
-      />
-      <select
-        name="categoryGroup"
-        value={formGroup}
-        className="input"
-        onChange={(event) => {
-          const group = event.target.value as ExpenseCategoryGroup
-          const firstCategory = expenseCategoryRepository.listByGroup(group)[0] ?? ''
-          setFormGroup(group)
-          setPreferredCategory(firstCategory)
-          setCategoryVersion((value) => value + 1)
-        }}
-      >
-        {Object.entries(expenseCategories).map(([key, category]) => (
-          <option key={key} value={key}>
-            {category.label}
-          </option>
-        ))}
-      </select>
-      <FormattedNumberInput
-        key={`cost-${editingItem?.id ?? 'new'}`}
-        name="cost"
-        min={0}
-        className="input"
-        defaultValue={editingItem?.cost}
-        placeholder="Chi phí"
-        required
-      />
-      <select
-        key={`category-${formGroup}-${categoryVersion}-${editingItem?.id ?? 'new'}`}
-        name="category"
-        defaultValue={selectedCategory}
-        className="input"
-      >
-        {categoryItems.map((item) => (
-          <option key={item} value={item}>
-            {item}
-          </option>
-        ))}
-      </select>
-      <div className="flex gap-2">
-        <input
-          value={newCategoryName}
-          onChange={(event) => setNewCategoryName(event.target.value)}
+      <label className="space-y-1">
+        <span className="text-xs font-medium text-slate-300">Ngày chi phí</span>
+        <AppDatePicker
+          key={`date-${editingItem?.id ?? 'new'}`}
+          name="date"
+          defaultValue={editingItem?.date}
           className="input"
-          placeholder="Tạo category mới"
+          required
+          placeholder="Chọn ngày"
         />
-        <button
-          type="button"
-          onClick={onCreateCategory}
-          className="shrink-0 rounded-xl border border-slate-700 px-3 text-sm hover:bg-slate-800"
-        >
-          Thêm
-        </button>
+      </label>
+      <label className="space-y-1">
+        <span className="text-xs font-medium text-slate-300">Nhóm chi phí</span>
+        <Select
+          key={`group-${editingItem?.id ?? 'new'}`}
+          name="categoryGroup"
+          classNamePrefix="brand-select"
+          options={expenseGroupOptions}
+          value={expenseGroupOptions.find((option) => option.value === formGroup) ?? null}
+          onChange={(option) => {
+            const group = (option?.value ?? 'maintenance') as ExpenseCategoryGroup
+            const firstCategory = expenseCategoryRepository.listByGroup(group)[0] ?? ''
+            setFormGroup(group)
+            setPreferredCategory(firstCategory)
+            setCategoryVersion((value) => value + 1)
+          }}
+          isSearchable={false}
+          placeholder="Chọn nhóm chi phí"
+        />
+      </label>
+      <label className="space-y-1">
+        <span className="text-xs font-medium text-slate-300">Số tiền</span>
+        <FormattedNumberInput
+          key={`cost-${editingItem?.id ?? 'new'}`}
+          name="cost"
+          min={0}
+          className="input"
+          defaultValue={editingItem?.cost}
+          placeholder="Chi phí"
+          required
+        />
+      </label>
+      <label className="space-y-1">
+        <span className="text-xs font-medium text-slate-300">Hạng mục chi phí</span>
+        <Select
+          key={`category-${formGroup}-${categoryVersion}-${editingItem?.id ?? 'new'}`}
+          name="category"
+          classNamePrefix="brand-select"
+          options={categoryOptions}
+          value={categoryOptions.find((option) => option.value === selectedCategory) ?? null}
+          onChange={(option) => setPreferredCategory(option?.value ?? '')}
+          isSearchable
+          placeholder="Chọn hạng mục"
+        />
+      </label>
+      <div className="space-y-1">
+        <span className="text-xs font-medium text-slate-300">Tạo hạng mục mới</span>
+        <div className="flex gap-2">
+          <input
+            value={newCategoryName}
+            onChange={(event) => setNewCategoryName(event.target.value)}
+            className="input"
+            placeholder="Tạo category mới"
+          />
+          <button
+            type="button"
+            onClick={onCreateCategory}
+            className="shrink-0 rounded-xl border border-slate-700 px-3 text-sm hover:bg-slate-800"
+          >
+            Thêm
+          </button>
+        </div>
       </div>
-      <FormattedNumberInput
-        key={`odo-${editingItem?.id ?? 'new'}`}
-        name="odoAtExpense"
-        min={0}
-        className="input"
-        defaultValue={editingItem?.odoAtExpense}
-        placeholder="ODO tại thời điểm chi"
-      />
-      <textarea
-        name="note"
-        className="input md:col-span-3"
-        rows={2}
-        defaultValue={editingItem?.note}
-        placeholder="Ghi chú"
-      />
+      <label className="space-y-1">
+        <span className="text-xs font-medium text-slate-300">ODO tại thời điểm chi</span>
+        <FormattedNumberInput
+          key={`odo-${editingItem?.id ?? 'new'}`}
+          name="odoAtExpense"
+          min={0}
+          className="input"
+          defaultValue={editingItem?.odoAtExpense}
+          placeholder="ODO tại thời điểm chi"
+        />
+      </label>
+      <label className="space-y-1 md:col-span-3">
+        <span className="text-xs font-medium text-slate-300">Ghi chú</span>
+        <textarea
+          name="note"
+          className="input"
+          rows={2}
+          defaultValue={editingItem?.note}
+          placeholder="Ghi chú"
+        />
+      </label>
       <button
         type="submit"
         className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 hover:bg-blue-700 md:col-span-3"

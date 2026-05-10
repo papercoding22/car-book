@@ -37,7 +37,7 @@ export function CarDetailPage() {
       />
 
       <section className="grid gap-4 lg:grid-cols-2">
-        <RecentExpensesSection expenses={expenses} />
+        <RecentExpensesSection carId={car.id} expenses={expenses} />
         <InstalledPartsSection parts={parts} />
       </section>
     </div>
