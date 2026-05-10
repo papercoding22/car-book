@@ -13,7 +13,11 @@ const currentYear = new Date().getFullYear()
 const schema = z.object({
   brand: z.string().min(1, 'Cần nhập hãng xe'),
   model: z.string().min(1, 'Cần nhập model'),
-  manufactureYear: z.coerce.number().int().min(1950).max(currentYear + 1),
+  manufactureYear: z.coerce
+    .number()
+    .int()
+    .min(1950)
+    .max(currentYear + 1),
   licensePlate: z.string().min(1, 'Cần nhập biển số'),
   currentOdo: z.coerce.number().min(0, 'ODO không được âm'),
   image: z.string().optional(),
@@ -150,10 +154,15 @@ export function CarFormPage({ mode }: CarFormPageProps) {
         </label>
         <label className="space-y-1">
           <span className="text-sm text-slate-300">Biển số</span>
-          <input name="licensePlate" defaultValue={current?.licensePlate} className="input" required />
+          <input
+            name="licensePlate"
+            defaultValue={current?.licensePlate}
+            className="input"
+            required
+          />
         </label>
         <label className="space-y-1">
-          <span className="text-sm text-slate-300">ODO hien tai</span>
+          <span className="text-sm text-slate-300">ODO hiện tại</span>
           <FormattedNumberInput
             name="currentOdo"
             defaultValue={current?.currentOdo}
@@ -173,17 +182,28 @@ export function CarFormPage({ mode }: CarFormPageProps) {
         </label>
         <label className="space-y-1 sm:col-span-2">
           <span className="text-sm text-slate-300">Ảnh xe (URL)</span>
-          <input name="image" defaultValue={current?.image} className="input" placeholder="https://..." />
+          <input
+            name="image"
+            defaultValue={current?.image}
+            className="input"
+            placeholder="https://..."
+          />
         </label>
         <label className="space-y-1 sm:col-span-2">
           <span className="text-sm text-slate-300">Ghi chú</span>
           <textarea name="note" defaultValue={current?.note} rows={4} className="input" />
         </label>
         <div className="flex gap-3 sm:col-span-2">
-          <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 hover:bg-blue-700">
+          <button
+            type="submit"
+            className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-slate-200 hover:bg-blue-700"
+          >
             {mode === 'create' ? 'Lưu xe' : 'Cập nhật'}
           </button>
-          <Link to={routes.cars} className="rounded-xl border border-slate-700 px-4 py-2 text-slate-100">
+          <Link
+            to={routes.cars}
+            className="rounded-xl border border-slate-700 px-4 py-2 text-slate-100"
+          >
             Hủy
           </Link>
         </div>
