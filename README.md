@@ -26,18 +26,29 @@ npm run build
 
 ## Deploy GitHub Pages
 
+### Cách 1: Tự deploy bằng gh-pages
+
 1. Cập nhật `vite.config.ts` nếu cần base path riêng cho repo.
-2. Build app:
-
-```bash
-npm run build
-```
-
-3. Deploy lên `gh-pages` branch:
+2. Chạy deploy (tự build trước khi deploy):
 
 ```bash
 npm run deploy
 ```
+
+### Cách 2: Deploy tự động bằng GitHub Actions (đã setup sẵn)
+
+1. Push code lên branch `main`.
+2. Vào GitHub repo -> `Settings` -> `Pages`.
+3. Ở mục `Build and deployment`, chọn `Source = GitHub Actions`.
+4. Workflow `Deploy to GitHub Pages` sẽ tự build và publish mỗi lần push `main`.
+
+Workflow file: `.github/workflows/deploy-pages.yml`
+
+## URL GitHub Pages
+
+Sau khi deploy, app thường có URL dạng:
+
+`https://papercoding22.github.io/car-book/`
 
 ## Cấu trúc chính
 
