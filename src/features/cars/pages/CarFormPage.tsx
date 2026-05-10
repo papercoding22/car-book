@@ -1,6 +1,8 @@
 import { z } from 'zod'
+import { useMemo, useState } from 'react'
 import type { FormEventHandler } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import CreatableSelect from 'react-select/creatable'
 import { carRepository } from '../car.repository'
 import { routes } from '../../../app/routes'
 import type { CarInput } from '../car.types'
@@ -26,10 +28,56 @@ type CarFormPageProps = {
   mode: 'create' | 'edit'
 }
 
+const popularBrands = [
+  'Toyota',
+  'Honda',
+  'Hyundai',
+  'Kia',
+  'Mazda',
+  'Ford',
+  'Mitsubishi',
+  'Nissan',
+  'Suzuki',
+  'Subaru',
+  'Volkswagen',
+  'BMW',
+  'Mercedes-Benz',
+  'Audi',
+  'Lexus',
+  'Volvo',
+  'Porsche',
+  'Land Rover',
+  'Peugeot',
+  'MG',
+  'VinFast',
+  'Yamaha',
+  'Kawasaki',
+  'Ducati',
+  'KTM',
+  'Triumph',
+  'Harley-Davidson',
+  'Royal Enfield',
+  'Benelli',
+  'Aprilia',
+  'Piaggio',
+]
+
 export function CarFormPage({ mode }: CarFormPageProps) {
   const params = useParams()
   const navigate = useNavigate()
   const current = params.carId ? carRepository.getById(params.carId) : undefined
+  const existingBrands = carRepository
+    .list()
+    .map((car) => car.brand.trim())
+    .filter(Boolean)
+  const brandOptions = [...new Set([...popularBrands, ...existingBrands])].sort((a, b) =>
+    a.localeCompare(b),
+  )
+  const selectOptions = useMemo(
+    () => brandOptions.map((brand) => ({ value: brand, label: brand })),
+    [brandOptions],
+  )
+  const [brandValue, setBrandValue] = useState(current?.brand ?? '')
 
   const onSubmit: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
@@ -74,7 +122,17 @@ export function CarFormPage({ mode }: CarFormPageProps) {
       <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
         <label className="space-y-1">
           <span className="text-sm text-slate-300">Hãng xe</span>
-          <input name="brand" defaultValue={current?.brand} className="input" required />
+          <CreatableSelect
+            options={selectOptions}
+            value={brandValue ? { value: brandValue, label: brandValue } : null}
+            onChange={(option) => setBrandValue(option?.value ?? '')}
+            onCreateOption={(inputValue) => setBrandValue(inputValue.trim())}
+            placeholder="Tìm hoặc nhập hãng mới"
+            classNamePrefix="brand-select"
+            noOptionsMessage={() => 'Không tìm thấy hãng'}
+            formatCreateLabel={(value) => `Tạo hãng mới: ${value}`}
+          />
+          <input type="hidden" name="brand" value={brandValue} />
         </label>
         <label className="space-y-1">
           <span className="text-sm text-slate-300">Model</span>

@@ -208,3 +208,47 @@ body {
 .react-datepicker__day--outside-month {
   color: var(--color-muted) !important;
 }
+
+.brand-select__control {
+  min-height: 44px !important;
+  border-radius: 0.75rem !important;
+  border-color: var(--color-border) !important;
+  background: var(--color-surface) !important;
+  box-shadow: none !important;
+}
+
+.brand-select__control--is-focused {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 30%, transparent) !important;
+}
+
+.brand-select__value-container,
+.brand-select__single-value,
+.brand-select__input-container,
+.brand-select__placeholder {
+  color: var(--color-text-primary) !important;
+}
+
+.brand-select__placeholder {
+  color: var(--color-muted) !important;
+}
+
+.brand-select__menu {
+  z-index: 40 !important;
+  border: 1px solid var(--color-border) !important;
+  background: var(--color-surface) !important;
+}
+
+.brand-select__option {
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.brand-select__option--is-focused {
+  background: color-mix(in srgb, var(--color-border) 28%, transparent) !important;
+}
+
+.brand-select__option--is-selected {
+  background: var(--color-primary) !important;
+  color: #f8fafc !important;
+}
